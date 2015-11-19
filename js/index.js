@@ -17,12 +17,12 @@ light.position.multiplyScalar(1);
 light.castShadow = true;
 light.shadowCameraFar = 10;
 light.shadowDarkness = 0.5;
-
+ 
+//scane.add(camera);
 scene.add(light);
 
 
-
-  var PLANE_SIZE = 1000;
+  var PLANE_SIZE = 10000;
 
   //Geometries
   var planeGeometry = new THREE.PlaneGeometry(PLANE_SIZE, PLANE_SIZE, 32, 32);
@@ -184,12 +184,14 @@ var xp=0, yp=40, zp=120;
 cameraposition(0,0,0);
  
 
+
 var counter = 0;
 var scaleShrinkage = 20;
 var slow = 5
  function render() {
      counter++;
     renderer.render(scene, camera);
+   //  container.appendChild( renderer.domElement );
     
     snowmanMesh.position.y = 3 *   Math.sin( counter / slow );
 
@@ -198,8 +200,6 @@ var slow = 5
       1 + Math.sin(counter / slow ) / scaleShrinkage,
       1 + Math.cos(counter / slow) / scaleShrinkage
     );
-   // requestAnimationFrame( render ); 
-
    move();
  
 }
@@ -232,7 +232,8 @@ $(document).keydown(function(event){
         }   
   });
 
-$(window).keypress(function (e) {
+$(window).keypress(function (e) 
+{
   if (e.keyCode === 0 || e.keyCode === 32) 
   {
      if(movement ==1)
@@ -263,140 +264,54 @@ camera.lookAt(snowmanMesh.position)
 
 }
 
-// nieve
 
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
+// NIEVE MIL...!
 
-var container;
 
-var particle;
+function initCanvas()
+{
+  var ctx = document.getElementById('canvas1').getContext('2d');
+  var cW = ctx.canvas.width, cH = ctx.canvas.height;
+  var flakes = [];
 
-var camera;
-var scene;
-var renderer;
+  function addFlake()
+  {
+    var x = Math.floor(Math.random() * cW) + 1;
+    var y = 0;
+    var s = Math.floor(Math.random() * 3) + 1;
+    flakes.push({"x":x,"y":y,"s":s});
+  }
 
-var mouseX = 0;
-var mouseY = 0;
-
-var windowHalfX = window.innerWidth / 2;
-var windowHalfY = window.innerHeight / 2;
-
-var particles = []; 
-var particleImage = new Image(); //THREE.ImageUtils.loadTexture( "http://i.imgur.com/cTALZ.png" );
-particleImage.src = 'http://i.imgur.com/cTALZ.png'; 
-
-function init() {
-    container = document.createElement('div');
-    document.body.appendChild(container);
-
-    camera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
-    camera.position.z = 1000;
-
-    scene = new THREE.Scene();
-    scene.add(camera);
-        
-    renderer = new THREE.CanvasRenderer();
-    renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-    var material = new THREE.ParticleBasicMaterial( { map: new THREE.Texture(particleImage) } );
-        
-    for (var i = 0; i < 500; i++) {
-
-        particle = new Particle3D( material);
-        particle.position.x = Math.random() * 2000 - 1000;
-        particle.position.y = Math.random() * 2000 - 1000;
-        particle.position.z = Math.random() * 2000 - 1000;
-        particle.scale.x = particle.scale.y =  1;
-        scene.add( particle );
-        
-        particles.push(particle); 
+  function snow()
+  {
+    addFlake();
+    addFlake();
+    for(var i = 0; i < flakes.length; i++)
+    {
+      ctx.fillStyle = "rgba(255,255,255,.75)";
+      ctx.beginPath();
+      ctx.arc(flakes[i].x, flakes[i].y+=flakes[i].s*.5, flakes[i].s*.5, 0, Math.PI*2, false);
+      ctx.fill();
+      if(flakes[i].y > cH)
+      {
+        flakes.splice(i,1);
+      }
     }
+  }
 
-    container.appendChild( renderer.domElement );
-    setInterval(loop, 1000 / 60);    
+  function animate()
+  {
+    ctx.save();
+    ctx.clearRect(0, 0, cW, cH);
+
+    snow();
+    ctx.restore();
+  }
+
+  var animateInterval = setInterval(animate, 30);
 }
 
-
-function loop() 
+window.addEventListener('load', function(event) 
 {
-
-for(var i = 0; i<particles.length; i++) 
-{
-        var particle = particles[i]; 
-        particle.updatePhysics(); 
-
-        with(particle.position) 
-        {
-            if(y<-1000) y+=2000; 
-            if(x>1000) x-=2000; 
-            else if(x<-1000) x+=2000; 
-            if(z>1000) z-=2000; 
-            else if(z<-1000) z+=2000; 
-        }                
-    }
-}
-
-var TO_RADIANS = Math.PI / 180;
-
-Particle3D = function(material) 
-{
-    THREE.Particle.call(this, material);
-
-    //this.material = material instanceof Array ? material : [ material ];
-    // define properties
-    this.velocity = new THREE.Vector3(0, -8, 0);
-    this.velocity.rotateX(randomRange(-45, 45));
-    this.velocity.rotateY(randomRange(0, 360));
-    this.gravity = new THREE.Vector3(0, 0, 0);
-    this.drag = 1;
-    
-};
-
-Particle3D.prototype = new THREE.Particle();
-Particle3D.prototype.constructor = Particle3D;
-
-Particle3D.prototype.updatePhysics = function() {
-    this.velocity.multiplyScalar(this.drag);
-    this.velocity.addSelf(this.gravity);
-    this.position.addSelf(this.velocity);
-}
-
-THREE.Vector3.prototype.rotateY = function(angle) {
-    cosRY = Math.cos(angle * TO_RADIANS);
-    sinRY = Math.sin(angle * TO_RADIANS);
-
-    var tempz = this.z;
-    var tempx = this.x;
-
-    this.x = (tempx * cosRY) + (tempz * sinRY);
-    this.z = (tempx * -sinRY) + (tempz * cosRY);
-}
-
-THREE.Vector3.prototype.rotateX = function(angle) {
-    cosRY = Math.cos(angle * TO_RADIANS);
-    sinRY = Math.sin(angle * TO_RADIANS);
-
-    var tempz = this.z;
-    var tempy = this.y;
-
-    this.y = (tempy * cosRY) + (tempz * sinRY);
-    this.z = (tempy * -sinRY) + (tempz * cosRY);
-}
-
-THREE.Vector3.prototype.rotateZ = function(angle) {
-    cosRY = Math.cos(angle * TO_RADIANS);
-    sinRY = Math.sin(angle * TO_RADIANS);
-
-    var tempx = this.x;
-    var tempy = this.y;
-
-    this.y = (tempy * cosRY) + (tempx * sinRY);
-    this.x = (tempy * -sinRY) + (tempx * cosRY);
-}
-
-// returns a random number between the two limits provided 
-
-function randomRange(min, max) {
-    return ((Math.random() * (max - min)) + min);
-}
-
+  initCanvas();
+});
