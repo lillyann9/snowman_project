@@ -17,7 +17,7 @@ light.position.multiplyScalar(1);
 light.castShadow = true;
 light.shadowCameraFar = 10;
 light.shadowDarkness = 0.5;
- 
+
 //scane.add(camera);
 scene.add(light);
 
@@ -46,7 +46,7 @@ scene.add(light);
   plane.receiveShadow = true;
   plane.castShadow = true;
 
-   scene.add(plane)   
+   scene.add(plane)
 
 var HAT_HEIGHT = 6;
 var HAT_RIM_HEIGHT = 1;
@@ -150,7 +150,7 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
   hatRim.position.y = BODY_RADIUS * 2  +  HEAD_RADIUS * 1.75 + HAT_RIM_HEIGHT / 2;
 
   body.castShadow = true;
-  body.position.x = 0; 
+  body.position.x = 0;
   body.position.y = BODY_RADIUS;
   body.position.z = 0;
 
@@ -178,11 +178,10 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
 
   snowmanMesh.castShadow = true;
 
-scene.add(snowmanMesh)
+scene.add(snowmanMesh);
 
 var xp=0, yp=40, zp=120;
 cameraposition(0,0,0);
- 
 
 
 var counter = 0;
@@ -192,7 +191,7 @@ var slow = 5
      counter++;
     renderer.render(scene, camera);
    //  container.appendChild( renderer.domElement );
-    
+
     snowmanMesh.position.y = 3 *   Math.sin( counter / slow );
 
     snowmanMesh.scale.set(
@@ -201,13 +200,43 @@ var slow = 5
       1 + Math.cos(counter / slow) / scaleShrinkage
     );
    move();
- 
+
 }
 
  render()
 
-$(document).keydown(function(event){    
-    var key = event.which;                
+function throwSnowballs() {
+
+    var snowball = new THREE.Mesh(
+        new THREE.SphereGeometry(5, 150, 150),
+        new THREE.MeshBasicMaterial({color: 0xFFFFFF})
+    );
+
+    snowball.position.set(Math.floor(Math.random() * 201) - 100, 30, 50);
+
+    scene.add(snowball);
+
+    new TWEEN
+    .Tween({
+        height: 30,
+        movement: 50
+    })
+    .to({
+        height: 0,
+        movement: -150
+    }, 500)
+    .onUpdate(function () {
+        snowball.position.y = this.height;
+        snowball.position.z = this.movement;
+    })
+    .onComplete(function() {
+        scene.remove(snowball);
+    })
+    .start();
+}
+
+$(document).keydown(function(event){
+    var key = event.which;
             switch(key) {
               case 37:
                   // Key left.
@@ -229,12 +258,12 @@ $(document).keydown(function(event){
                   if(yp > 7){yp=yp-5;}
                    cameraposition();
                   break;
-        }   
+        }
   });
 
-$(window).keypress(function (e) 
+$(window).keypress(function (e)
 {
-  if (e.keyCode === 0 || e.keyCode === 32) 
+  if (e.keyCode === 0 || e.keyCode === 32)
   {
      if(movement ==1)
       {
@@ -250,7 +279,7 @@ function move()
 {
     if(movement == 1)
     {
-       requestAnimationFrame( render ); 
+       requestAnimationFrame( render );
     }
 }
 
@@ -306,12 +335,14 @@ function initCanvas()
 
     snow();
     ctx.restore();
+    TWEEN.update();
   }
 
   var animateInterval = setInterval(animate, 30);
+  var snowballInterval = setInterval(throwSnowballs, 1200);
 }
 
-window.addEventListener('load', function(event) 
+window.addEventListener('load', function(event)
 {
   initCanvas();
 });
