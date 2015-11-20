@@ -117,7 +117,7 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
       j++;
 
     }
-    
+
   }
 
   var eyeAngelZ;
@@ -215,7 +215,21 @@ var slow = 5
 
 }
 
- render()
+ render();
+
+function checkCollisions(snowball) {
+    position1 = snowball.position,
+    position2 = snowmanMesh.position;
+
+    var distance = Math.sqrt(
+      (position1.x - position2.x)*(position1.x - position2.x) +
+      (position1.z - position2.z)*(position1.z - position2.z)
+    );
+    if (distance < 10) {
+      console.log("Collision");
+      return true;
+    }
+}
 
 function throwSnowballs() {
 
@@ -240,6 +254,10 @@ function throwSnowballs() {
     .onUpdate(function () {
         snowball.position.y = this.height;
         snowball.position.z = this.movement;
+        if (checkCollisions(snowball)) {
+            scene.remove(snowball);
+            // Funcion de vidas o puntos
+        }
     })
     .onComplete(function() {
         scene.remove(snowball);
