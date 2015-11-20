@@ -18,11 +18,11 @@ light.castShadow = true;
 light.shadowCameraFar = 10;
 light.shadowDarkness = 0.5;
 
+//scane.add(camera);
 scene.add(light);
 
 
-
-  var PLANE_SIZE = 1000;
+  var PLANE_SIZE = 10000;
 
   //Geometries
   var planeGeometry = new THREE.PlaneGeometry(PLANE_SIZE, PLANE_SIZE, 32, 32);
@@ -46,21 +46,19 @@ scene.add(light);
   plane.receiveShadow = true;
   plane.castShadow = true;
 
-   scene.add(plane)   
+   scene.add(plane)
 
-var HAT_HEIGHT = 6;
-var HAT_RIM_HEIGHT = 1;
-var BODY_RADIUS = 9;
-var HEAD_RADIUS = 4;
-var BUTTON_COUNT = 3;
+var BODY_RADIUS = 13;
+var BODY2_RADIUS = 8;
+var HEAD_RADIUS = 6;
+var BUTTON_COUNT = 6;
 var BUTTON_RADIUS = 1;
-var EYE_RADIUS = 0.5;
+var EYE_RADIUS = 0.6;
 var HOUSE_HEIGHT = 3;
 
 var bodyGeometry = new THREE.SphereGeometry(BODY_RADIUS, 30, 30);
+var body2Geometry = new THREE.SphereGeometry(BODY2_RADIUS,30,30);
 var headGeometry = new THREE.SphereGeometry(HEAD_RADIUS, 30, 30);
-var hatGeometry = new THREE.CylinderGeometry(3, 3, HAT_HEIGHT, 40);
-var hatRimGeometry = new THREE.CylinderGeometry(4, 4, HAT_RIM_HEIGHT, 40);
 var eyeGeometry = new THREE.SphereGeometry(EYE_RADIUS, 30, 30);
 var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
 
@@ -68,14 +66,13 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
     color: 0xffffff,
     wireframe: false
   });
-
-  var headMaterial = new THREE.MeshLambertMaterial({
+ var bodyMaterial2 = new THREE.MeshLambertMaterial({
     color: 0xffffff,
     wireframe: false
   });
 
-  var hatMaterial = new THREE.MeshLambertMaterial({
-    color: 0x333333,
+  var headMaterial = new THREE.MeshLambertMaterial({
+    color: 0xffffff,
     wireframe: false
   });
 
@@ -90,23 +87,37 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
   });
 
   var armMaterial = new THREE.LineBasicMaterial({
-    color: 0xA52A2A
+    color: 0xcc6600,
+    linewidth: 5
   });
 
 
   var body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+  var body2 = new THREE.Mesh(body2Geometry,bodyMaterial2);
   var head = new THREE.Mesh(headGeometry, headMaterial);
-  var hat = new THREE.Mesh(hatGeometry, hatMaterial);
-  var hatRim = new THREE.Mesh(hatRimGeometry, hatMaterial);
 
   var i;
+  var j =0;
   for ( i = 0; i < BUTTON_COUNT; i++ ) {
-    buttons[i] = new THREE.Mesh(buttonGeometry,buttonMaterial);
-    var buttonAngle = (i + 3) * Math.PI / 6;
-    buttons[i].position.x = 0;
-    buttons[i].position.y =  BODY_RADIUS * (1 - Math.cos(buttonAngle));
-    buttons[i].position.z = BODY_RADIUS * Math.sin(buttonAngle) + BUTTON_RADIUS * 0.8;
-    buttons[i].castShadow = true;
+    if(i < 3){
+      buttons[i] = new THREE.Mesh(buttonGeometry,buttonMaterial);
+      var buttonAngle = (i + 3) * Math.PI / 6;
+      buttons[i].position.x = 0;
+      buttons[i].position.y =  BODY_RADIUS * (1 - Math.cos(buttonAngle));
+      buttons[i].position.z = BODY_RADIUS * Math.sin(buttonAngle) + BUTTON_RADIUS * 0.8;
+      buttons[i].castShadow = true;
+
+    }else{
+      buttons[i] = new THREE.Mesh(buttonGeometry,buttonMaterial);
+      var buttonAngle = (j + 3) * Math.PI / 6;
+      buttons[i].position.x = 0;
+      buttons[i].position.y =  BODY2_RADIUS * (1 - Math.cos(buttonAngle))+22;
+      buttons[i].position.z = BODY2_RADIUS * Math.sin(buttonAngle) + BUTTON_RADIUS * 0.8;
+      buttons[i].castShadow = true;
+      j++;
+
+    }
+    
   }
 
   var eyeAngelZ;
@@ -117,18 +128,18 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
     eyeAngelXY = Math.PI * 5 / 8;
     //todo - the maths here isn't right.
     eyes[i].position.x =  (-1 + 2 * i) * HEAD_RADIUS * Math.cos((-1 + 2 * i) * eyeAngelZ) + EYE_RADIUS * (-1 + 2 * i) / 5;
-    eyes[i].position.z = HEAD_RADIUS + EYE_RADIUS + Math.cos(eyeAngelXY) * Math.sin(eyeAngelZ) * HEAD_RADIUS;
-    eyes[i].position.y = BODY_RADIUS * 2 + HEAD_RADIUS + Math.sin(eyeAngelXY) * Math.cos(eyeAngelZ) * HEAD_RADIUS;
+    eyes[i].position.z = (HEAD_RADIUS + EYE_RADIUS + Math.cos(eyeAngelXY) * Math.sin(eyeAngelZ) * HEAD_RADIUS)+1;
+    eyes[i].position.y = (BODY_RADIUS * 2 + HEAD_RADIUS + Math.sin(eyeAngelXY) * Math.cos(eyeAngelZ) * HEAD_RADIUS)+12;
   }
 
   var arm1Geometry = new THREE.Geometry();
-  arm1Geometry.vertices.push(new THREE.Vector3(0, BODY_RADIUS, 0));
-  arm1Geometry.vertices.push(new THREE.Vector3(BODY_RADIUS * 1.5, BODY_RADIUS * 1.5, 0));
+  arm1Geometry.vertices.push(new THREE.Vector3(0, (BODY_RADIUS+BODY2_RADIUS)+13, 0));
+  arm1Geometry.vertices.push(new THREE.Vector3(BODY_RADIUS * 1.2, BODY_RADIUS * 2, 0));
   arm1Geometry.vertices.push(new THREE.Vector3(BODY_RADIUS * 1.7, BODY_RADIUS * 2, 0));
 
   var arm2Geometry = new THREE.Geometry();
-  arm2Geometry.vertices.push(new THREE.Vector3(0, BODY_RADIUS, 0));
-  arm2Geometry.vertices.push(new THREE.Vector3(-BODY_RADIUS * 1.5, BODY_RADIUS * 1.5, 0));
+  arm2Geometry.vertices.push(new THREE.Vector3(0, (BODY_RADIUS+BODY2_RADIUS)+13, 0));
+  arm2Geometry.vertices.push(new THREE.Vector3(-BODY_RADIUS * 1.2, BODY_RADIUS * 2, 0));
   arm2Geometry.vertices.push(new THREE.Vector3(-BODY_RADIUS * 1.7, BODY_RADIUS * 2, 0));
 
   var arm1 = new THREE.Line(arm1Geometry, armMaterial);
@@ -143,29 +154,30 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
 
   nose.rotation.z =  Math.PI / 2;
   nose.rotation.y =  Math.PI * 1.5;
-  nose.position.z = HEAD_RADIUS + HOUSE_HEIGHT / 2;
-  nose.position.y = BODY_RADIUS * 2 + HEAD_RADIUS;
-
-  hat.position.y =  BODY_RADIUS * 2  +  HEAD_RADIUS * 1.75 + HAT_HEIGHT / 2;
-  hatRim.position.y = BODY_RADIUS * 2  +  HEAD_RADIUS * 1.75 + HAT_RIM_HEIGHT / 2;
+  nose.position.z = (HEAD_RADIUS + HOUSE_HEIGHT / 2)+1;
+  nose.position.y = (BODY_RADIUS * 2 + HEAD_RADIUS)+12;
 
   body.castShadow = true;
-  body.position.x = 0; 
+  body.position.x = 0;
   body.position.y = BODY_RADIUS;
   body.position.z = 0;
 
+  body2.castShadow = true;
+  body2.position.x = 0;
+  body2.position.y = (parseInt(BODY_RADIUS) * 2 + parseInt(HEAD_RADIUS));
+  body2.position.z = 0;
+
   head.position.x = 0;
-  head.position.y = (parseInt(BODY_RADIUS) * 2 + parseInt(HEAD_RADIUS));
+  head.position.y = (parseInt(BODY_RADIUS) * 2 + parseInt(HEAD_RADIUS))+13;
   head.position.z = 0;
 
   // Create snowman
   var snowmanMesh = new THREE.Group();
   snowmanMesh.add(body);
+  snowmanMesh.add(body2);
   snowmanMesh.add(head);
   snowmanMesh.add(arm1);
   snowmanMesh.add(arm2);
-  snowmanMesh.add(hat);
-  snowmanMesh.add(hatRim);
   snowmanMesh.add(nose);
 
   for ( i = 0; i < buttons.length; i++ ) {
@@ -178,11 +190,11 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
 
   snowmanMesh.castShadow = true;
 
-scene.add(snowmanMesh)
+scene.add(snowmanMesh);
 
 var xp=0, yp=40, zp=120;
 cameraposition(0,0,0);
- 
+
 
 var counter = 0;
 var scaleShrinkage = 20;
@@ -190,7 +202,8 @@ var slow = 5
  function render() {
      counter++;
     renderer.render(scene, camera);
-    
+   //  container.appendChild( renderer.domElement );
+
     snowmanMesh.position.y = 3 *   Math.sin( counter / slow );
 
     snowmanMesh.scale.set(
@@ -198,16 +211,44 @@ var slow = 5
       1 + Math.sin(counter / slow ) / scaleShrinkage,
       1 + Math.cos(counter / slow) / scaleShrinkage
     );
-   // requestAnimationFrame( render ); 
-
    move();
- 
+
 }
 
  render()
 
-$(document).keydown(function(event){    
-    var key = event.which;                
+function throwSnowballs() {
+
+    var snowball = new THREE.Mesh(
+        new THREE.SphereGeometry(5, 150, 150),
+        new THREE.MeshBasicMaterial({color: 0xFFFFFF})
+    );
+
+    snowball.position.set(Math.floor(Math.random() * 201) - 100, 30, 50);
+
+    scene.add(snowball);
+
+    new TWEEN
+    .Tween({
+        height: 30,
+        movement: 50
+    })
+    .to({
+        height: 0,
+        movement: -150
+    }, 500)
+    .onUpdate(function () {
+        snowball.position.y = this.height;
+        snowball.position.z = this.movement;
+    })
+    .onComplete(function() {
+        scene.remove(snowball);
+    })
+    .start();
+}
+
+$(document).keydown(function(event){
+    var key = event.which;
             switch(key) {
               case 37:
                   // Key left.
@@ -229,11 +270,12 @@ $(document).keydown(function(event){
                   if(yp > 7){yp=yp-5;}
                    cameraposition();
                   break;
-        }   
+        }
   });
 
-$(window).keypress(function (e) {
-  if (e.keyCode === 0 || e.keyCode === 32) 
+$(window).keypress(function (e)
+{
+  if (e.keyCode === 0 || e.keyCode === 32)
   {
      if(movement ==1)
       {
@@ -249,7 +291,7 @@ function move()
 {
     if(movement == 1)
     {
-       requestAnimationFrame( render ); 
+       requestAnimationFrame( render );
     }
 }
 
@@ -263,140 +305,56 @@ camera.lookAt(snowmanMesh.position)
 
 }
 
-// nieve
 
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
+// NIEVE MIL...!
 
-var container;
 
-var particle;
+function initCanvas()
+{
+  var ctx = document.getElementById('canvas1').getContext('2d');
+  var cW = ctx.canvas.width, cH = ctx.canvas.height;
+  var flakes = [];
 
-var camera;
-var scene;
-var renderer;
+  function addFlake()
+  {
+    var x = Math.floor(Math.random() * cW) + 1;
+    var y = 0;
+    var s = Math.floor(Math.random() * 3) + 1;
+    flakes.push({"x":x,"y":y,"s":s});
+  }
 
-var mouseX = 0;
-var mouseY = 0;
-
-var windowHalfX = window.innerWidth / 2;
-var windowHalfY = window.innerHeight / 2;
-
-var particles = []; 
-var particleImage = new Image(); //THREE.ImageUtils.loadTexture( "http://i.imgur.com/cTALZ.png" );
-particleImage.src = 'http://i.imgur.com/cTALZ.png'; 
-
-function init() {
-    container = document.createElement('div');
-    document.body.appendChild(container);
-
-    camera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
-    camera.position.z = 1000;
-
-    scene = new THREE.Scene();
-    scene.add(camera);
-        
-    renderer = new THREE.CanvasRenderer();
-    renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-    var material = new THREE.ParticleBasicMaterial( { map: new THREE.Texture(particleImage) } );
-        
-    for (var i = 0; i < 500; i++) {
-
-        particle = new Particle3D( material);
-        particle.position.x = Math.random() * 2000 - 1000;
-        particle.position.y = Math.random() * 2000 - 1000;
-        particle.position.z = Math.random() * 2000 - 1000;
-        particle.scale.x = particle.scale.y =  1;
-        scene.add( particle );
-        
-        particles.push(particle); 
+  function snow()
+  {
+    addFlake();
+    addFlake();
+    for(var i = 0; i < flakes.length; i++)
+    {
+      ctx.fillStyle = "rgba(255,255,255,.75)";
+      ctx.beginPath();
+      ctx.arc(flakes[i].x, flakes[i].y+=flakes[i].s*.5, flakes[i].s*.5, 0, Math.PI*2, false);
+      ctx.fill();
+      if(flakes[i].y > cH)
+      {
+        flakes.splice(i,1);
+      }
     }
+  }
 
-    container.appendChild( renderer.domElement );
-    setInterval(loop, 1000 / 60);    
+  function animate()
+  {
+    ctx.save();
+    ctx.clearRect(0, 0, cW, cH);
+
+    snow();
+    ctx.restore();
+    TWEEN.update();
+  }
+
+  var animateInterval = setInterval(animate, 30);
+  var snowballInterval = setInterval(throwSnowballs, 1200);
 }
 
-
-function loop() 
+window.addEventListener('load', function(event)
 {
-
-for(var i = 0; i<particles.length; i++) 
-{
-        var particle = particles[i]; 
-        particle.updatePhysics(); 
-
-        with(particle.position) 
-        {
-            if(y<-1000) y+=2000; 
-            if(x>1000) x-=2000; 
-            else if(x<-1000) x+=2000; 
-            if(z>1000) z-=2000; 
-            else if(z<-1000) z+=2000; 
-        }                
-    }
-}
-
-var TO_RADIANS = Math.PI / 180;
-
-Particle3D = function(material) 
-{
-    THREE.Particle.call(this, material);
-
-    //this.material = material instanceof Array ? material : [ material ];
-    // define properties
-    this.velocity = new THREE.Vector3(0, -8, 0);
-    this.velocity.rotateX(randomRange(-45, 45));
-    this.velocity.rotateY(randomRange(0, 360));
-    this.gravity = new THREE.Vector3(0, 0, 0);
-    this.drag = 1;
-    
-};
-
-Particle3D.prototype = new THREE.Particle();
-Particle3D.prototype.constructor = Particle3D;
-
-Particle3D.prototype.updatePhysics = function() {
-    this.velocity.multiplyScalar(this.drag);
-    this.velocity.addSelf(this.gravity);
-    this.position.addSelf(this.velocity);
-}
-
-THREE.Vector3.prototype.rotateY = function(angle) {
-    cosRY = Math.cos(angle * TO_RADIANS);
-    sinRY = Math.sin(angle * TO_RADIANS);
-
-    var tempz = this.z;
-    var tempx = this.x;
-
-    this.x = (tempx * cosRY) + (tempz * sinRY);
-    this.z = (tempx * -sinRY) + (tempz * cosRY);
-}
-
-THREE.Vector3.prototype.rotateX = function(angle) {
-    cosRY = Math.cos(angle * TO_RADIANS);
-    sinRY = Math.sin(angle * TO_RADIANS);
-
-    var tempz = this.z;
-    var tempy = this.y;
-
-    this.y = (tempy * cosRY) + (tempz * sinRY);
-    this.z = (tempy * -sinRY) + (tempz * cosRY);
-}
-
-THREE.Vector3.prototype.rotateZ = function(angle) {
-    cosRY = Math.cos(angle * TO_RADIANS);
-    sinRY = Math.sin(angle * TO_RADIANS);
-
-    var tempx = this.x;
-    var tempy = this.y;
-
-    this.y = (tempy * cosRY) + (tempx * sinRY);
-    this.x = (tempy * -sinRY) + (tempx * cosRY);
-}
-
-// returns a random number between the two limits provided 
-
-function randomRange(min, max) {
-    return ((Math.random() * (max - min)) + min);
-}
-
+  initCanvas();
+});
