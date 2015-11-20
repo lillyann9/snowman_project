@@ -48,19 +48,17 @@ scene.add(light);
 
    scene.add(plane)
 
-var HAT_HEIGHT = 6;
-var HAT_RIM_HEIGHT = 1;
-var BODY_RADIUS = 9;
-var HEAD_RADIUS = 4;
-var BUTTON_COUNT = 3;
+var BODY_RADIUS = 13;
+var BODY2_RADIUS = 8;
+var HEAD_RADIUS = 6;
+var BUTTON_COUNT = 6;
 var BUTTON_RADIUS = 1;
-var EYE_RADIUS = 0.5;
+var EYE_RADIUS = 0.6;
 var HOUSE_HEIGHT = 3;
 
 var bodyGeometry = new THREE.SphereGeometry(BODY_RADIUS, 30, 30);
+var body2Geometry = new THREE.SphereGeometry(BODY2_RADIUS,30,30);
 var headGeometry = new THREE.SphereGeometry(HEAD_RADIUS, 30, 30);
-var hatGeometry = new THREE.CylinderGeometry(3, 3, HAT_HEIGHT, 40);
-var hatRimGeometry = new THREE.CylinderGeometry(4, 4, HAT_RIM_HEIGHT, 40);
 var eyeGeometry = new THREE.SphereGeometry(EYE_RADIUS, 30, 30);
 var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
 
@@ -68,14 +66,13 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
     color: 0xffffff,
     wireframe: false
   });
-
-  var headMaterial = new THREE.MeshLambertMaterial({
+ var bodyMaterial2 = new THREE.MeshLambertMaterial({
     color: 0xffffff,
     wireframe: false
   });
 
-  var hatMaterial = new THREE.MeshLambertMaterial({
-    color: 0x333333,
+  var headMaterial = new THREE.MeshLambertMaterial({
+    color: 0xffffff,
     wireframe: false
   });
 
@@ -90,23 +87,37 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
   });
 
   var armMaterial = new THREE.LineBasicMaterial({
-    color: 0xA52A2A
+    color: 0xcc6600,
+    linewidth: 5
   });
 
 
   var body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+  var body2 = new THREE.Mesh(body2Geometry,bodyMaterial2);
   var head = new THREE.Mesh(headGeometry, headMaterial);
-  var hat = new THREE.Mesh(hatGeometry, hatMaterial);
-  var hatRim = new THREE.Mesh(hatRimGeometry, hatMaterial);
 
   var i;
+  var j =0;
   for ( i = 0; i < BUTTON_COUNT; i++ ) {
-    buttons[i] = new THREE.Mesh(buttonGeometry,buttonMaterial);
-    var buttonAngle = (i + 3) * Math.PI / 6;
-    buttons[i].position.x = 0;
-    buttons[i].position.y =  BODY_RADIUS * (1 - Math.cos(buttonAngle));
-    buttons[i].position.z = BODY_RADIUS * Math.sin(buttonAngle) + BUTTON_RADIUS * 0.8;
-    buttons[i].castShadow = true;
+    if(i < 3){
+      buttons[i] = new THREE.Mesh(buttonGeometry,buttonMaterial);
+      var buttonAngle = (i + 3) * Math.PI / 6;
+      buttons[i].position.x = 0;
+      buttons[i].position.y =  BODY_RADIUS * (1 - Math.cos(buttonAngle));
+      buttons[i].position.z = BODY_RADIUS * Math.sin(buttonAngle) + BUTTON_RADIUS * 0.8;
+      buttons[i].castShadow = true;
+
+    }else{
+      buttons[i] = new THREE.Mesh(buttonGeometry,buttonMaterial);
+      var buttonAngle = (j + 3) * Math.PI / 6;
+      buttons[i].position.x = 0;
+      buttons[i].position.y =  BODY2_RADIUS * (1 - Math.cos(buttonAngle))+22;
+      buttons[i].position.z = BODY2_RADIUS * Math.sin(buttonAngle) + BUTTON_RADIUS * 0.8;
+      buttons[i].castShadow = true;
+      j++;
+
+    }
+    
   }
 
   var eyeAngelZ;
@@ -117,18 +128,18 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
     eyeAngelXY = Math.PI * 5 / 8;
     //todo - the maths here isn't right.
     eyes[i].position.x =  (-1 + 2 * i) * HEAD_RADIUS * Math.cos((-1 + 2 * i) * eyeAngelZ) + EYE_RADIUS * (-1 + 2 * i) / 5;
-    eyes[i].position.z = HEAD_RADIUS + EYE_RADIUS + Math.cos(eyeAngelXY) * Math.sin(eyeAngelZ) * HEAD_RADIUS;
-    eyes[i].position.y = BODY_RADIUS * 2 + HEAD_RADIUS + Math.sin(eyeAngelXY) * Math.cos(eyeAngelZ) * HEAD_RADIUS;
+    eyes[i].position.z = (HEAD_RADIUS + EYE_RADIUS + Math.cos(eyeAngelXY) * Math.sin(eyeAngelZ) * HEAD_RADIUS)+1;
+    eyes[i].position.y = (BODY_RADIUS * 2 + HEAD_RADIUS + Math.sin(eyeAngelXY) * Math.cos(eyeAngelZ) * HEAD_RADIUS)+12;
   }
 
   var arm1Geometry = new THREE.Geometry();
-  arm1Geometry.vertices.push(new THREE.Vector3(0, BODY_RADIUS, 0));
-  arm1Geometry.vertices.push(new THREE.Vector3(BODY_RADIUS * 1.5, BODY_RADIUS * 1.5, 0));
+  arm1Geometry.vertices.push(new THREE.Vector3(0, (BODY_RADIUS+BODY2_RADIUS)+13, 0));
+  arm1Geometry.vertices.push(new THREE.Vector3(BODY_RADIUS * 1.2, BODY_RADIUS * 2, 0));
   arm1Geometry.vertices.push(new THREE.Vector3(BODY_RADIUS * 1.7, BODY_RADIUS * 2, 0));
 
   var arm2Geometry = new THREE.Geometry();
-  arm2Geometry.vertices.push(new THREE.Vector3(0, BODY_RADIUS, 0));
-  arm2Geometry.vertices.push(new THREE.Vector3(-BODY_RADIUS * 1.5, BODY_RADIUS * 1.5, 0));
+  arm2Geometry.vertices.push(new THREE.Vector3(0, (BODY_RADIUS+BODY2_RADIUS)+13, 0));
+  arm2Geometry.vertices.push(new THREE.Vector3(-BODY_RADIUS * 1.2, BODY_RADIUS * 2, 0));
   arm2Geometry.vertices.push(new THREE.Vector3(-BODY_RADIUS * 1.7, BODY_RADIUS * 2, 0));
 
   var arm1 = new THREE.Line(arm1Geometry, armMaterial);
@@ -143,29 +154,30 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
 
   nose.rotation.z =  Math.PI / 2;
   nose.rotation.y =  Math.PI * 1.5;
-  nose.position.z = HEAD_RADIUS + HOUSE_HEIGHT / 2;
-  nose.position.y = BODY_RADIUS * 2 + HEAD_RADIUS;
-
-  hat.position.y =  BODY_RADIUS * 2  +  HEAD_RADIUS * 1.75 + HAT_HEIGHT / 2;
-  hatRim.position.y = BODY_RADIUS * 2  +  HEAD_RADIUS * 1.75 + HAT_RIM_HEIGHT / 2;
+  nose.position.z = (HEAD_RADIUS + HOUSE_HEIGHT / 2)+1;
+  nose.position.y = (BODY_RADIUS * 2 + HEAD_RADIUS)+12;
 
   body.castShadow = true;
   body.position.x = 0;
   body.position.y = BODY_RADIUS;
   body.position.z = 0;
 
+  body2.castShadow = true;
+  body2.position.x = 0;
+  body2.position.y = (parseInt(BODY_RADIUS) * 2 + parseInt(HEAD_RADIUS));
+  body2.position.z = 0;
+
   head.position.x = 0;
-  head.position.y = (parseInt(BODY_RADIUS) * 2 + parseInt(HEAD_RADIUS));
+  head.position.y = (parseInt(BODY_RADIUS) * 2 + parseInt(HEAD_RADIUS))+13;
   head.position.z = 0;
 
   // Create snowman
   var snowmanMesh = new THREE.Group();
   snowmanMesh.add(body);
+  snowmanMesh.add(body2);
   snowmanMesh.add(head);
   snowmanMesh.add(arm1);
   snowmanMesh.add(arm2);
-  snowmanMesh.add(hat);
-  snowmanMesh.add(hatRim);
   snowmanMesh.add(nose);
 
   for ( i = 0; i < buttons.length; i++ ) {
