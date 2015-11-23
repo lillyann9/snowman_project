@@ -96,6 +96,15 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
   var body2 = new THREE.Mesh(body2Geometry,bodyMaterial2);
   var head = new THREE.Mesh(headGeometry, headMaterial);
 
+  var scoreboard = new Scoreboard();
+  scoreboard.score();
+  scoreboard.help(
+    'Arrow keys to move. ' +
+    'Space bar to jump for fruit. ' +
+    'Watch for shaking trees with fruit.' +
+    'Get near the tree and jump before the fruit is gone!'
+  );
+
   var i;
   var j =0;
   for ( i = 0; i < BUTTON_COUNT; i++ ) {
@@ -297,6 +306,7 @@ $(window).keypress(function (e)
 {
   if (e.keyCode === 0 || e.keyCode === 32)
   {
+    scoreboard.showTimer();
      if(movement ==1){
 
         movement = 0; // GAME PAUSED
