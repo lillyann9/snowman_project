@@ -130,7 +130,6 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
     eyes[i] = new THREE.Mesh(eyeGeometry, eyeMaterial);
     eyeAngelZ = Math.PI * 3 / 8;
     eyeAngelXY = Math.PI * 5 / 8;
-    //todo - the maths here isn't right.
     eyes[i].position.x =  (-1 + 2 * i) * HEAD_RADIUS * Math.cos((-1 + 2 * i) * eyeAngelZ) + EYE_RADIUS * (-1 + 2 * i) / 5;
     eyes[i].position.z = (HEAD_RADIUS + EYE_RADIUS + Math.cos(eyeAngelXY) * Math.sin(eyeAngelZ) * HEAD_RADIUS)+1;
     eyes[i].position.y = (BODY_RADIUS * 2 + HEAD_RADIUS + Math.sin(eyeAngelXY) * Math.cos(eyeAngelZ) * HEAD_RADIUS)+12;
@@ -208,7 +207,7 @@ var slow = 5
     renderer.render(scene, camera);
    //  container.appendChild( renderer.domElement );
 
-    snowmanMesh.position.y = 3 *   Math.sin( counter / slow );
+    // snowmanMesh.position.y = 3 *   Math.sin( counter / slow );
 
     snowmanMesh.scale.set(
       1 + Math.cos(counter /  slow) / scaleShrinkage,
@@ -273,9 +272,10 @@ $(document).keydown(function(event){
     var key = event.which;
             switch(key) {
               case 37:
+                snowmanMesh.position.x = snowmanMesh.position.x - 5;
                   // Key left.
-                  xp=xp+5;
-                 cameraposition();
+                 //  xp=xp+5;
+                 // cameraposition();
                   break;
               case 38:
                   // Key up.
@@ -284,8 +284,9 @@ $(document).keydown(function(event){
                   break;
               case 39:
                   // Key right.
-                  xp=xp-5;
-                  cameraposition();
+                  // xp=xp-5;
+                  // cameraposition();
+                  snowmanMesh.position.x = snowmanMesh.position.x + 5;
                   break;
               case 40:
                   // Key down.
@@ -299,6 +300,7 @@ $(window).keypress(function (e)
 {
   if (e.keyCode === 0 || e.keyCode === 32)
   {
+
     scoreboard.timer();
      if(movement ==1)
       {
@@ -308,6 +310,16 @@ $(window).keypress(function (e)
       }else
       {movement=1;
         scoreboard.startTimer();}
+
+     if(movement ==1){
+
+        movement = 0; // GAME PAUSED
+
+      }else{
+
+        movement=1;
+
+      }
 
      move();
   }
