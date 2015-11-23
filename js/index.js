@@ -203,7 +203,7 @@ var slow = 5
     renderer.render(scene, camera);
    //  container.appendChild( renderer.domElement );
 
-    // snowmanMesh.position.y = 3 *   Math.sin( counter / slow );
+    snowmanMesh.position.y = 3 *   Math.sin( counter / slow );
 
     snowmanMesh.scale.set(
       1 + Math.cos(counter /  slow) / scaleShrinkage,
