@@ -204,7 +204,7 @@ var slow = 5
     renderer.render(scene, camera);
    //  container.appendChild( renderer.domElement );
 
-    snowmanMesh.position.y = 3 *   Math.sin( counter / slow );
+    // snowmanMesh.position.y = 3 *   Math.sin( counter / slow );
 
     snowmanMesh.scale.set(
       1 + Math.cos(counter /  slow) / scaleShrinkage,
@@ -269,9 +269,10 @@ $(document).keydown(function(event){
     var key = event.which;
             switch(key) {
               case 37:
+                snowmanMesh.position.x = snowmanMesh.position.x - 5;
                   // Key left.
-                  xp=xp+5;
-                 cameraposition();
+                 //  xp=xp+5;
+                 // cameraposition();
                   break;
               case 38:
                   // Key up.
@@ -280,8 +281,9 @@ $(document).keydown(function(event){
                   break;
               case 39:
                   // Key right.
-                  xp=xp-5;
-                  cameraposition();
+                  // xp=xp-5;
+                  // cameraposition();
+                  snowmanMesh.position.x = snowmanMesh.position.x + 5;
                   break;
               case 40:
                   // Key down.
@@ -295,11 +297,15 @@ $(window).keypress(function (e)
 {
   if (e.keyCode === 0 || e.keyCode === 32)
   {
-     if(movement ==1)
-      {
+     if(movement ==1){
+
         movement = 0; // GAME PAUSED
-      }else
-      {movement=1;}
+
+      }else{
+
+        movement=1;
+
+      }
 
      move();
   }
