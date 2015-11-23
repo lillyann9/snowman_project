@@ -47,10 +47,6 @@ scene.add(light);
   plane.castShadow = true;
 
    scene.add(plane)
-   var scoreboard = new Scoreboard();
-  
-  scoreboard.score();
-
 
 var BODY_RADIUS = 13;
 var BODY2_RADIUS = 8;
@@ -305,11 +301,8 @@ $(window).keypress(function (e)
      if(movement ==1)
       {
         movement = 0; // GAME PAUSED
-        scoreboard.stopTimer();
-
       }else
-      {movement=1;
-        scoreboard.startTimer();}
+      {movement=1;}
 
      if(movement ==1){
 
