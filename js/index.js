@@ -109,7 +109,7 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
   );
 
   var game_over = false;
-  
+
 
   var i;
   var j =0;
@@ -231,7 +231,11 @@ var slow = 5
 
  render();
 
-function checkCollisions(snowball) {
+function checkCollisions(snowball, snowballHasCollided) {
+    if (snowballHasCollided.boolean) {
+        return false;
+    }
+
     position1 = snowball.position,
     position2 = snowmanMesh.position;
 
@@ -240,7 +244,7 @@ function checkCollisions(snowball) {
       (position1.z - position2.z)*(position1.z - position2.z)
     );
     if (distance < 10) {
-      console.log("Collision");
+      snowballHasCollided.boolean = true;
       return true;
     }
 }
@@ -252,9 +256,10 @@ function throwSnowballs() {
         new THREE.MeshBasicMaterial({color: 0xFFFFFF})
     );
 
-    snowball.position.set(Math.floor(Math.random() * 201) - 100, 30, 50);
+    snowball.position.set(Math.floor(Math.random() * 151) - 75, 30, 50);
 
     scene.add(snowball);
+    var snowballHasCollided = {boolean: false};
 
     new TWEEN
     .Tween({
@@ -269,14 +274,14 @@ function throwSnowballs() {
         snowball.position.y = this.height;
         snowball.position.z = this.movement;
         var lives = scoreboard.getScore();
-        if (checkCollisions(snowball)) {
+        if (checkCollisions(snowball, snowballHasCollided)) {
             Sounds.break.play();
             scene.remove(snowball);
-            scoreboard.subtractPoints(1)
-            if (lives === 0 ) {       
-              scoreboard.setScore(0);   
+            scoreboard.subtractPoints(1);
+            if (lives === 0 ) {
+              scoreboard.setScore(0);
               scoreboard.stopTimer();
-              scoreboard.message('GAME OVER!\nPress Space bar to restart the game');  
+              scoreboard.message('GAME OVER!\nPress Space bar to restart the game');
               movement=0;
             }
         }
@@ -291,12 +296,12 @@ $(document).keydown(function(event){
     var key = event.which;
             switch(key) {
               case 37:
-                if(snowmanMesh.position.x != -150){
+                if(snowmanMesh.position.x != -75){
 
                       snowmanMesh.position.x = snowmanMesh.position.x - 5;
 
                   }
-              
+
                   break;
               case 38:
                   // Key up.
@@ -304,8 +309,8 @@ $(document).keydown(function(event){
                   cameraposition();
                   break;
               case 39:
-          
-                  if(snowmanMesh.position.x != 150){
+
+                  if(snowmanMesh.position.x != 75){
 
                       snowmanMesh.position.x = snowmanMesh.position.x + 5;
 
@@ -353,7 +358,7 @@ $(window).keypress(function (e)
           scoreboard.resetTimer();
           scoreboard.message('');
         }
-        
+
         movement=1;
 
       }
