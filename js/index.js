@@ -100,11 +100,14 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
   Sounds.tune1.play();
   scoreboard.score(3);
   scoreboard.help(
-    'Arrow keys to move. ' +
+    'Left and Right keys to move. ' +
     'Space bar to pause the game. ' +
-    'Avoid the snowball to save your lives' +
+    'Avoid the snowballs to save your lives.' +
     ''
   );
+
+  var game_over = false;
+  
 
   var i;
   var j =0;
@@ -263,10 +266,17 @@ function throwSnowballs() {
     .onUpdate(function () {
         snowball.position.y = this.height;
         snowball.position.z = this.movement;
+        var lives = scoreboard.getScore();
         if (checkCollisions(snowball)) {
             scene.remove(snowball);
             scoreboard.subtractPoints(1)
-            // Funcion de vidas o puntos
+            if (lives === 0 ) {       
+              scoreboard.setScore(0);   
+              scoreboard.stopTimer();
+              scoreboard.message('GAME OVER!') 
+              
+              movement =0;
+            }
         }
     })
     .onComplete(function() {

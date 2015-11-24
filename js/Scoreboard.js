@@ -101,10 +101,6 @@ Scoreboard.prototype.help = Scoreboard.prototype.setHelp;
  * Score
  */
 
- Scoreboard.prototype.showLives = function(){
-
- }
-
 Scoreboard.prototype.showScore = function() {
   this.ensureDom();
   this.score_el.style.display = 'block';
