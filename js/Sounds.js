@@ -25,9 +25,7 @@ Sound.prototype.stop = function() {
 
 var Sounds = {
   all: [
-    'bubble','buzz','click','donk',
-    'drip','guitar','knock','scratch',
-    'snick','spring','swish', 'tune1'
+    'tune1'
   ]
 };
 Sounds.all.forEach(function(sound) {
