@@ -96,6 +96,15 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
   var body2 = new THREE.Mesh(body2Geometry,bodyMaterial2);
   var head = new THREE.Mesh(headGeometry, headMaterial);
 
+  var scoreboard = new Scoreboard();
+  scoreboard.score(3);
+  scoreboard.help(
+    'Arrow keys to move. ' +
+    'Space bar to pause the game. ' +
+    'Avoid the snowball to save your lives' +
+    ''
+  );
+
   var i;
   var j =0;
   for ( i = 0; i < BUTTON_COUNT; i++ ) {
@@ -255,6 +264,7 @@ function throwSnowballs() {
         snowball.position.z = this.movement;
         if (checkCollisions(snowball)) {
             scene.remove(snowball);
+            scoreboard.subtractPoints(1)
             // Funcion de vidas o puntos
         }
     })
@@ -296,12 +306,13 @@ $(window).keypress(function (e)
 {
   if (e.keyCode === 0 || e.keyCode === 32)
   {
+    scoreboard.showTimer();
      if(movement ==1){
-
         movement = 0; // GAME PAUSED
+        scoreboard.stopTimer();
 
       }else{
-
+        scoreboard.startTimer();
         movement=1;
 
       }
