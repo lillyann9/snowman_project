@@ -100,9 +100,9 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
   scoreboard.score();
   scoreboard.help(
     'Arrow keys to move. ' +
-    'Space bar to jump for fruit. ' +
-    'Watch for shaking trees with fruit.' +
-    'Get near the tree and jump before the fruit is gone!'
+    'Space bar to pause the game. ' +
+    'Avoid the snowball to save your lives' +
+    ''
   );
 
   var i;
@@ -308,11 +308,11 @@ $(window).keypress(function (e)
   {
     scoreboard.showTimer();
      if(movement ==1){
-
         movement = 0; // GAME PAUSED
+        scoreboard.stopTimer();
 
       }else{
-
+        scoreboard.startTimer();
         movement=1;
 
       }
