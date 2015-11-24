@@ -260,7 +260,7 @@ Scoreboard.prototype.ensureDom = function() {
   el.style.right = "50px";
   el.style.top = "75px";
   el.style.width = (window.innerWidth * 0.2) + "px";
-  el.style.minWidth = '200px';
+  el.style.minWidth = '350px';
 
   el.style.color = '#BFFF00';
   el.style.fontFamily = 'Arial, San Serif';

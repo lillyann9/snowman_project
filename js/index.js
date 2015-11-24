@@ -270,6 +270,7 @@ function throwSnowballs() {
         snowball.position.z = this.movement;
         var lives = scoreboard.getScore();
         if (checkCollisions(snowball)) {
+            Sounds.break.play();
             scene.remove(snowball);
             scoreboard.subtractPoints(1)
             if (lives === 0 ) {       
@@ -279,7 +280,6 @@ function throwSnowballs() {
               
               movement =0;
             }
- Move_snowman
         }
     })
     .onComplete(function() {

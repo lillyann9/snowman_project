@@ -25,7 +25,7 @@ Sound.prototype.stop = function() {
 
 var Sounds = {
   all: [
-    'tune1'
+    'tune1', 'break'
   ]
 };
 Sounds.all.forEach(function(sound) {
