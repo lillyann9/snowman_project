@@ -252,14 +252,14 @@ function throwSnowballs() {
         new THREE.MeshBasicMaterial({color: 0xFFFFFF})
     );
 
-    snowball.position.set(Math.floor(Math.random() * 201) - 100, Math.floor(Math.random() * 201) - 100, 3);
+    snowball.position.set(Math.floor(Math.random() * 201) - 100, 30, 50);
 
     scene.add(snowball);
 
     new TWEEN
     .Tween({
         height: 30,
-        movement: 80
+        movement: 50
     })
     .to({
         height: 0,
@@ -276,9 +276,8 @@ function throwSnowballs() {
             if (lives === 0 ) {       
               scoreboard.setScore(0);   
               scoreboard.stopTimer();
-              scoreboard.message('GAME OVER!') 
-              
-              movement =0;
+              scoreboard.message('GAME OVER!\nPress Space bar to restart the game');  
+              movement=0;
             }
         }
     })
@@ -337,13 +336,24 @@ $(window).keypress(function (e)
   if (e.keyCode === 0 || e.keyCode === 32)
   {
     scoreboard.showTimer();
+    var lives = scoreboard.getScore();
 
      if(movement ==1){
         movement = 0; // GAME PAUSED
         scoreboard.stopTimer();
 
       }else{
-        scoreboard.startTimer();
+        if(lives!=0){
+          scoreboard.startTimer();
+          scoreboard.message('');
+
+        }else{
+
+          scoreboard.setScore(3);
+          scoreboard.resetTimer();
+          scoreboard.message('');
+        }
+        
         movement=1;
 
       }
