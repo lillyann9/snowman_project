@@ -238,7 +238,7 @@ function throwSnowballs() {
         new THREE.MeshBasicMaterial({color: 0xFFFFFF})
     );
 
-    snowball.position.set(Math.floor(Math.random() * 201) - 100, 30, 50);
+    snowball.position.set(Math.floor(Math.random() * 201) - 100, 5, 50);
 
     scene.add(snowball);
 
