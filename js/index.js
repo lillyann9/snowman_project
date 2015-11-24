@@ -344,6 +344,7 @@ $(window).keypress(function (e)
       }else{
         if(lives!=0){
           scoreboard.startTimer();
+          scoreboard.message('');
 
         }else{
 
