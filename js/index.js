@@ -3,6 +3,7 @@ var buttons = [];
 var eyes = [];
 var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000)
 var movement=0;
+var mute = 0;
 
 
 var renderer = new THREE.WebGLRenderer();
@@ -309,6 +310,16 @@ $(document).keydown(function(event){
                   // Key down.
                   if(yp > 7){yp=yp-5;}
                    cameraposition();
+                  break;
+              case 77:
+                  //music
+                  if (mute === 0 ){
+                    Sounds.tune1.stop();
+                    mute = 1;
+                  } else if(mute === 1) {
+                    Sounds.tune1.play();
+                    mute = 0;
+                  }
                   break;
         }
   });
