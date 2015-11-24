@@ -117,7 +117,7 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
       var buttonAngle = (i + 3) * Math.PI / 6;
       buttons[i].position.x = 0;
       buttons[i].position.y =  BODY_RADIUS * (1 - Math.cos(buttonAngle));
-      buttons[i].position.z = BODY_RADIUS * Math.sin(buttonAngle) + BUTTON_RADIUS * 0.8;
+      buttons[i].position.z = (BODY_RADIUS * Math.sin(buttonAngle) + BUTTON_RADIUS * 0.8)-50;
       buttons[i].castShadow = true;
 
     }else{
@@ -125,7 +125,7 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
       var buttonAngle = (j + 3) * Math.PI / 6;
       buttons[i].position.x = 0;
       buttons[i].position.y =  BODY2_RADIUS * (1 - Math.cos(buttonAngle))+22;
-      buttons[i].position.z = BODY2_RADIUS * Math.sin(buttonAngle) + BUTTON_RADIUS * 0.8;
+      buttons[i].position.z = (BODY2_RADIUS * Math.sin(buttonAngle) + BUTTON_RADIUS * 0.8)-50;
       buttons[i].castShadow = true;
       j++;
 
@@ -140,19 +140,19 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
     eyeAngelZ = Math.PI * 3 / 8;
     eyeAngelXY = Math.PI * 5 / 8;
     eyes[i].position.x =  (-1 + 2 * i) * HEAD_RADIUS * Math.cos((-1 + 2 * i) * eyeAngelZ) + EYE_RADIUS * (-1 + 2 * i) / 5;
-    eyes[i].position.z = (HEAD_RADIUS + EYE_RADIUS + Math.cos(eyeAngelXY) * Math.sin(eyeAngelZ) * HEAD_RADIUS)+1;
+    eyes[i].position.z = ((HEAD_RADIUS + EYE_RADIUS + Math.cos(eyeAngelXY) * Math.sin(eyeAngelZ) * HEAD_RADIUS)+1)-50;
     eyes[i].position.y = (BODY_RADIUS * 2 + HEAD_RADIUS + Math.sin(eyeAngelXY) * Math.cos(eyeAngelZ) * HEAD_RADIUS)+12;
   }
 
   var arm1Geometry = new THREE.Geometry();
-  arm1Geometry.vertices.push(new THREE.Vector3(0, (BODY_RADIUS+BODY2_RADIUS)+13, 0));
-  arm1Geometry.vertices.push(new THREE.Vector3(BODY_RADIUS * 1.2, BODY_RADIUS * 2, 0));
-  arm1Geometry.vertices.push(new THREE.Vector3(BODY_RADIUS * 1.7, BODY_RADIUS * 2, 0));
+  arm1Geometry.vertices.push(new THREE.Vector3(0, (BODY_RADIUS+BODY2_RADIUS)+13, -50));
+  arm1Geometry.vertices.push(new THREE.Vector3(BODY_RADIUS * 1.2, BODY_RADIUS * 2, -50));
+  arm1Geometry.vertices.push(new THREE.Vector3(BODY_RADIUS * 1.7, BODY_RADIUS * 2, -50));
 
   var arm2Geometry = new THREE.Geometry();
-  arm2Geometry.vertices.push(new THREE.Vector3(0, (BODY_RADIUS+BODY2_RADIUS)+13, 0));
-  arm2Geometry.vertices.push(new THREE.Vector3(-BODY_RADIUS * 1.2, BODY_RADIUS * 2, 0));
-  arm2Geometry.vertices.push(new THREE.Vector3(-BODY_RADIUS * 1.7, BODY_RADIUS * 2, 0));
+  arm2Geometry.vertices.push(new THREE.Vector3(0, (BODY_RADIUS+BODY2_RADIUS)+13, -50));
+  arm2Geometry.vertices.push(new THREE.Vector3(-BODY_RADIUS * 1.2, BODY_RADIUS * 2, -50));
+  arm2Geometry.vertices.push(new THREE.Vector3(-BODY_RADIUS * 1.7, BODY_RADIUS * 2, -50));
 
   var arm1 = new THREE.Line(arm1Geometry, armMaterial);
   var arm2 = new THREE.Line(arm2Geometry, armMaterial);
@@ -166,22 +166,22 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
 
   nose.rotation.z =  Math.PI / 2;
   nose.rotation.y =  Math.PI * 1.5;
-  nose.position.z = (HEAD_RADIUS + HOUSE_HEIGHT / 2)+1;
+  nose.position.z = ((HEAD_RADIUS + HOUSE_HEIGHT / 2)+1)-50;
   nose.position.y = (BODY_RADIUS * 2 + HEAD_RADIUS)+12;
 
   body.castShadow = true;
   body.position.x = 0;
   body.position.y = BODY_RADIUS;
-  body.position.z = 0;
+  body.position.z = -50;
 
   body2.castShadow = true;
   body2.position.x = 0;
   body2.position.y = (parseInt(BODY_RADIUS) * 2 + parseInt(HEAD_RADIUS));
-  body2.position.z = 0;
+  body2.position.z = -50;
 
   head.position.x = 0;
   head.position.y = (parseInt(BODY_RADIUS) * 2 + parseInt(HEAD_RADIUS))+13;
-  head.position.z = 0;
+  head.position.z = -50;
 
   // Create snowman
   var snowmanMesh = new THREE.Group();
@@ -250,14 +250,14 @@ function throwSnowballs() {
         new THREE.MeshBasicMaterial({color: 0xFFFFFF})
     );
 
-    snowball.position.set(Math.floor(Math.random() * 201) - 100, 30, 50);
+    snowball.position.set(Math.floor(Math.random() * 201) - 100, Math.floor(Math.random() * 201) - 100, 3);
 
     scene.add(snowball);
 
     new TWEEN
     .Tween({
         height: 30,
-        movement: 50
+        movement: 80
     })
     .to({
         height: 0,
@@ -277,6 +277,7 @@ function throwSnowballs() {
               
               movement =0;
             }
+ Move_snowman
         }
     })
     .onComplete(function() {
@@ -289,10 +290,12 @@ $(document).keydown(function(event){
     var key = event.which;
             switch(key) {
               case 37:
-                snowmanMesh.position.x = snowmanMesh.position.x - 5;
-                  // Key left.
-                 //  xp=xp+5;
-                 // cameraposition();
+                if(snowmanMesh.position.x != -150){
+
+                      snowmanMesh.position.x = snowmanMesh.position.x - 5;
+
+                  }
+              
                   break;
               case 38:
                   // Key up.
@@ -300,14 +303,18 @@ $(document).keydown(function(event){
                   cameraposition();
                   break;
               case 39:
-                  // Key right.
-                  // xp=xp-5;
-                  // cameraposition();
-                  snowmanMesh.position.x = snowmanMesh.position.x + 5;
+          
+                  if(snowmanMesh.position.x != 150){
+
+                      snowmanMesh.position.x = snowmanMesh.position.x + 5;
+
+                  }
                   break;
               case 40:
                   // Key down.
-                  if(yp > 7){yp=yp-5;}
+                  if(yp > 7){
+                    yp=yp-5;
+                  }
                    cameraposition();
                   break;
         }
@@ -396,8 +403,9 @@ function initCanvas()
     TWEEN.update();
   }
 
-  var animateInterval = setInterval(animate, 30);
-  var snowballInterval = setInterval(throwSnowballs, 1200);
+  var snowballInterval = setInterval(throwSnowballs, 1500);
+
+  var animateInterval = setInterval(animate, 10);
 }
 
 window.addEventListener('load', function(event)
