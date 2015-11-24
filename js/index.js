@@ -100,11 +100,12 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
   var scoreboard = new Scoreboard();
   Sounds.tune1.play();
   scoreboard.score(3);
+  scoreboard.message('Press Space bar to start the game')
   scoreboard.help(
     'Left and Right keys to move. ' +
     'Space bar to pause the game. ' +
     'Avoid the snowballs to save your lives.' +
-    ''
+    'Press M to stop/start music.'
   );
 
   var game_over = false;
