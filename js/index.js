@@ -97,6 +97,7 @@ var buttonGeometry = new THREE.SphereGeometry(BUTTON_RADIUS, 30, 30);
   var head = new THREE.Mesh(headGeometry, headMaterial);
 
   var scoreboard = new Scoreboard();
+  Sounds.tune1.play();
   scoreboard.score(3);
   scoreboard.help(
     'Arrow keys to move. ' +
@@ -307,6 +308,7 @@ $(window).keypress(function (e)
   if (e.keyCode === 0 || e.keyCode === 32)
   {
     scoreboard.showTimer();
+
      if(movement ==1){
         movement = 0; // GAME PAUSED
         scoreboard.stopTimer();
