@@ -101,6 +101,10 @@ Scoreboard.prototype.help = Scoreboard.prototype.setHelp;
  * Score
  */
 
+ Scoreboard.prototype.showLives = function(){
+
+ }
+
 Scoreboard.prototype.showScore = function() {
   this.ensureDom();
   this.score_el.style.display = 'block';
@@ -112,7 +116,7 @@ Scoreboard.prototype.setScore = function(score) {
   this.showScore();
   this._score = score || 0;
 
-  this.score_el.innerHTML = "Score: " + this._score;
+  this.score_el.innerHTML = "Lives: " + this._score;
 
   return this;
 };
@@ -251,7 +255,7 @@ Scoreboard.prototype.ensureDom = function() {
   if (this.el) return;
 
   var el = this.el = document.createElement('div');
-  el.id = 'scoreboard';
+  el.id = 'lives';
   el.style.position = 'absolute';
   el.style.backgroundColor = 'black';
   el.style.opacity = 0.7;
