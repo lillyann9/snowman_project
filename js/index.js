@@ -246,14 +246,14 @@ function throwSnowballs() {
         new THREE.MeshBasicMaterial({color: 0xFFFFFF})
     );
 
-    snowball.position.set(Math.floor(Math.random() * 201) - 100, 5, 50);
+    snowball.position.set(Math.floor(Math.random() * 201) - 100, Math.floor(Math.random() * 201) - 100, 3);
 
     scene.add(snowball);
 
     new TWEEN
     .Tween({
         height: 30,
-        movement: 50
+        movement: 80
     })
     .to({
         height: 0,
@@ -265,7 +265,7 @@ function throwSnowballs() {
         if (checkCollisions(snowball)) {
             scene.remove(snowball);
             scoreboard.subtractPoints(1)
-            // Funcion de vidas o puntos
+           
         }
     })
     .onComplete(function() {
@@ -278,10 +278,12 @@ $(document).keydown(function(event){
     var key = event.which;
             switch(key) {
               case 37:
-                snowmanMesh.position.x = snowmanMesh.position.x - 5;
-                  // Key left.
-                 //  xp=xp+5;
-                 // cameraposition();
+                if(snowmanMesh.position.x != -150){
+
+                      snowmanMesh.position.x = snowmanMesh.position.x - 5;
+
+                  }
+              
                   break;
               case 38:
                   // Key up.
@@ -289,14 +291,18 @@ $(document).keydown(function(event){
                   cameraposition();
                   break;
               case 39:
-                  // Key right.
-                  // xp=xp-5;
-                  // cameraposition();
-                  snowmanMesh.position.x = snowmanMesh.position.x + 5;
+          
+                  if(snowmanMesh.position.x != 150){
+
+                      snowmanMesh.position.x = snowmanMesh.position.x + 5;
+
+                  }
                   break;
               case 40:
                   // Key down.
-                  if(yp > 7){yp=yp-5;}
+                  if(yp > 7){
+                    yp=yp-5;
+                  }
                    cameraposition();
                   break;
         }
@@ -384,8 +390,9 @@ function initCanvas()
     TWEEN.update();
   }
 
-  var animateInterval = setInterval(animate, 30);
-  var snowballInterval = setInterval(throwSnowballs, 1200);
+  var snowballInterval = setInterval(throwSnowballs, 1500);
+
+  var animateInterval = setInterval(animate, 10);
 }
 
 window.addEventListener('load', function(event)
